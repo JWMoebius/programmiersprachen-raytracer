@@ -6,7 +6,9 @@ TEST_CASE("AREA","[Aufgabe2area]")
 {
 	Sphere m(7, glm::vec3(0));
 	float m_area =m.area();
-	REQUIRE(m_area==7);
+	float m_volume =m.volume();
+	REQUIRE(m_volume==Approx(1436.75504));
+	REQUIRE(m_area==Approx(615.7521601));
 }
 
 
