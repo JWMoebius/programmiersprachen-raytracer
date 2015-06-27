@@ -66,41 +66,46 @@ class Sphere : public Shape {
 };
 /*~~~~~~~SPHERE~~~~~~~~~~~~*/
 
-/*~~~~~~~BOX~~~~~~~~~~~~*/
-/*
-  
-class Box: public Shape{
+/*~~~~~~~BOX~~~~~~~~~~~~*/  
+class Box : public Shape {
 	public:
 	Box()
-	:Shape{name_,color_}, minimum_{0,0,0}, maximum_{0,0,0}
+	:Shape{name_, color_}, minimum_{0,0,0}, maximum_{0,0,0}
 	{}
-	Box(glm::vec3 const& minimum, glm::vec3 const& maximum)
-	:Shape{name_,color_}, minimum_{minimum}, maximum_{maximum}
+	Box(std::string name, Color color, glm::vec3 const& minimum, glm::vec3 const& maximum)
+	:Shape{name, color}, minimum_{minimum}, maximum_{maximum}
 	{}
-	virtual float area() const override{
-		float i = 8;
-		return i;
+	/*virtual*/ float area() const override{
+		float a =maximum_.x-minimum_.x;
+		float b =maximum_.y-minimum_.y;
+		float c =maximum_.z-minimum_.z;
+		float ground = a*c;
+		float side =b*c;
+		float front =a*b;
+		return 2*(ground+side+front);
 	}
+	/*virtual*/ float volume() const override{
+		float a =maximum_.x-minimum_.x;
+		float b =maximum_.y-minimum_.y;
+		float c =maximum_.z-minimum_.z;
+		return a*b*c;
+	}	
 		
-	 float volume() const override{
-				float i = 8;
-		return i;		
-	}
 	glm::vec3 get_min() const{
 		return minimum_;
 	}
 	glm::vec3	get_max() const{
 		return maximum_;
 	}
-	 virtual/ std::ostream& print(std::ostream&  os)const override{
+	 /*virtual/ std::ostream& print(std::ostream&  os)const override{
 		os << this->get_name() << "/" <<this->get_color() << "/"<< minimum_.x()<<"/";	
 		os << minimum_.x()<<"/";
 		return os;
-	}
+	}*/
 	private:
 	glm::vec3 minimum_;
 	glm::vec3 maximum_;
-};*/
+};
 /*~~~~~~~BOX~~~~~~~~~~~~*/
 
 //Aufgabe 4
