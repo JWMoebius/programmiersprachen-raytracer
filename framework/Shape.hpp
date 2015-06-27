@@ -3,7 +3,11 @@
 #include "glm/vec3.hpp"/*~~~~~~~SPHERE~~~~~~~~~~~~*/
 #include <cmath>/*~~~~~~~SPHERE~~~~~~~~~~~~*/
 #include "color.hpp"
+#include "../framework/Ray.hpp"
 #include <string>
+/*~~~~~~~SPHERE~~~~~~~~~~~~*/
+#include "glm/glm.hpp"
+#include "glm/gtx/intersect.hpp"
 
 class Shape{
 	public:
@@ -52,14 +56,21 @@ class Sphere : public Shape {
 	glm::vec3 get_middle() const{
 		return middle_;
 	}
-		float get_radius() const{
+	float get_radius() const{
 		return radius_;
 	}
 	/* virtual*/ std::ostream& print(std::ostream&  os)const override{
 		os << this->get_name() << "/" <<this->get_color() << "/"<< 
 		this->get_radius()<<"/ Middle("<< middle_.x<<"/"<<middle_.y<<"/"<<
 		middle_.z<<")";
-		return os;
+		return os;		
+	}
+	float intersect(Ray test) const{
+			float distance=0;
+			glm::vec3 tempvec = glm::normalize(test.direction);
+			glm::intersectRaySphere(test.origin, tempvec,
+			this->middle_,this->radius_,distance);			
+			return distance;
 	}
 	private:
 	float radius_;
