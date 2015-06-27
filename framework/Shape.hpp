@@ -34,7 +34,7 @@ class Shape{
 class Sphere : public Shape {
 	public:
 	Sphere()
-	: radius_{0}, middle_{0,0,0}
+	: Shape{},radius_{1}, middle_{0,0,0}
 	{}
 	Sphere(std::string name, Color color,	float const& radius, glm::vec3 const& middle)
 	: Shape{name,color},radius_{radius}, middle_{middle}
@@ -56,8 +56,9 @@ class Sphere : public Shape {
 		return radius_;
 	}
 	/* virtual*/ std::ostream& print(std::ostream&  os)const override{
-		os << this->get_name() << "/" <<this->get_color() << "/"<< this->get_radius()<<"/";	
-		os << middle_.x<<"/"<<middle_.y;
+		os << this->get_name() << "/" <<this->get_color() << "/"<< 
+		this->get_radius()<<"/ Middle("<< middle_.x<<"/"<<middle_.y<<"/"<<
+		middle_.z<<")";
 		return os;
 	}
 	private:
@@ -97,11 +98,12 @@ class Box : public Shape {
 	glm::vec3	get_max() const{
 		return maximum_;
 	}
-	 /*virtual/ std::ostream& print(std::ostream&  os)const override{
-		os << this->get_name() << "/" <<this->get_color() << "/"<< minimum_.x()<<"/";	
-		os << minimum_.x()<<"/";
+	/* virtual*/ std::ostream& print(std::ostream&  os)const override{
+		os << this->get_name() << "/" <<this->get_color() << "/ min("<< 
+		minimum_.x<<"/"<<minimum_.y<<"/"<<	minimum_.z << ") / max(" <<
+		maximum_.x<<"/"	<<maximum_.y<<"/"<<maximum_.z<<")";
 		return os;
-	}*/
+	}
 	private:
 	glm::vec3 minimum_;
 	glm::vec3 maximum_;
