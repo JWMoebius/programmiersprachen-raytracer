@@ -40,7 +40,128 @@
 		maximum_.x<<"/"	<<maximum_.y<<"/"<<maximum_.z<<")"<<std::endl;
 		return os;
 	}
-	float Box::intersect(Ray test) const{
+ bool Box::intersect(Ray const& test, float& shortest_distance){
+		shortest_distance = 0;
+		// fuer Intersection	
+		float temp=9223372036854775807;		
+		bool is_intersected = false;
+		
+		glm::vec3 tempvec = glm::normalize(test.direction);
+		glm::vec3 a = minimum_; // vorne links unten	//--> passt
+		glm::vec3 b = minimum_;	// vorne rechts unten
+			b.x = maximum_.x; //--> passt
+		glm::vec3 c = minimum_;	// hinten links unten
+			c.z = maximum_.z; //-->passt
+		glm::vec3 d = minimum_;	// hinten rechts unten
+			d.x = maximum_.x;
+			d.z = maximum_.z; //--> passt
+		glm::vec3 e = minimum_;	// vorne links oben	
+			e.y= maximum_.y; //--> passt
+		glm::vec3 f = minimum_;	// vorne rechts oben
+			f.x= maximum_.x; //--> passt
+			f.y= maximum_.y; //--> passt
+		glm::vec3 g = minimum_;	// hinten links oben
+			e.y= maximum_.y; //--> passt
+			e.z= maximum_.z; //--> passt
+		glm::vec3 h = maximum_;	// hinten rechts oben
+		
+
+		//unten	Richtungsvektor
+		glm::vec3 ab = b-a;
+		glm::vec3 ac = c-a;
+		glm::vec3 bottom = glm::cross(ab, ac);
+		glm::vec3 bottom_orig = minimum_;
+		
+		//oben
+		glm::vec3 hg = g-h;
+		glm::vec3 hf = f-h;
+		glm::vec3 top	= glm::cross(hg, hf);
+		glm::vec3 top_orig = maximum_;
+		//vorne
+			//ab
+		glm::vec3 ae = e-a;
+		glm::vec3 front = glm::cross(ab, ae);		
+		glm::vec3 front_orig = minimum_;
+		//hinten
+			//hg
+		glm::vec3 hd = d-h;
+		glm::vec3 back = glm::cross(hg, hd);
+		glm::vec3 back_orig = maximum_;
+		//links
+			//ac
+			//ae
+		glm::vec3 left = glm::cross(ac, ae);
+		glm::vec3 left_orig = minimum_;
+		//rechts		
+			//hd
+			//hf
+		glm::vec3 right = glm::cross(hd, hf);
+		glm::vec3 right_orig = maximum_;
+		
+				//Normalize: glm::vec3 minab_normal = glm::normalize(minab_dir);
+		bottom = glm::normalize(bottom);
+		top = glm::normalize(top);
+		front = glm::normalize(front);
+		back = glm::normalize(back);
+		left = glm::normalize(left);
+		right = glm::normalize(right);
+		
+
+
+
+		//Intersetion MINab
+		glm::intersectRayPlane(test.origin, tempvec,
+		bottom_orig, bottom, temp);	
+		std::cout<<temp<< std::endl;
+		shortest_distance = temp;
+		if (temp>-9223372036854775807&&temp<9223372036854775807){is_intersected = true;}
+		std::cout<<temp<<std::endl;			
+		//Intersetion MINac
+		glm::intersectRayPlane(test.origin, tempvec,
+		top_orig, top, temp);
+		if (temp<shortest_distance&&temp>-9223372036854775807&&temp<9223372036854775807){
+			shortest_distance = temp;	
+			is_intersected = true;	
+		}
+		std::cout<<temp<<std::endl;
+		//Intersetion MINbc
+		glm::intersectRayPlane(test.origin, tempvec,
+		front_orig, front, temp);
+		if (temp<shortest_distance&&temp>-9223372036854775807&&temp<9223372036854775807){
+			shortest_distance = temp;	
+			is_intersected = true;
+		}
+		std::cout<<temp<<std::endl;
+		//Intersetion MAXab
+		glm::intersectRayPlane(test.origin, tempvec,
+		back_orig, back, temp);	
+		if (temp<shortest_distance&&temp>-9223372036854775807&&temp<9223372036854775807){
+			shortest_distance = temp;	
+			is_intersected = true;
+		}	
+		std::cout<<temp<<std::endl;
+		//Intersetion MAXac
+		glm::intersectRayPlane(test.origin, tempvec,
+		left_orig, left, temp);		
+		if (temp<shortest_distance&&temp>-9223372036854775807&&temp<9223372036854775807){
+			shortest_distance = temp;	
+			is_intersected = true;
+		}			
+		std::cout<<temp<<std::endl;
+		//Intersetion MAXbc
+		glm::intersectRayPlane(test.origin, tempvec,
+		right_orig, right, temp);		
+		if (temp<shortest_distance&&temp>-9223372036854775807&&temp<9223372036854775807){
+			shortest_distance = temp;
+			is_intersected = true;	
+		}	
+		std::cout<<temp<<std::endl;
+		shortest_distance = temp;
+		return is_intersected;
+
+	}
+	/*
+ float Box::intersect(Ray test) const{
 		//MIN AB Plane
 		glm::vec3 minab_org = minimum_;				
 		glm::vec3 minab_dir = minimum_;
@@ -82,20 +203,20 @@
 		float shortest_distance =0;		
 		float temp=3;		
 		glm::vec3 tempvec = glm::normalize(test.direction);
-/*		std::cout<<"Direction normalized:"<<tempvec.x<<tempvec.y<<tempvec.z<< "end"<<temp<<std::endl;
-			std::cout<<" MinABaktualisiermal: "<<minab_dir.x<< minab_dir.y<< 
-			minab_dir.z<<std::endl;
-			std::cout<<" MinACaktualisiermal: "<<minac_dir.x<< minac_dir.y<< 
-			minac_dir.z<<std::endl;
-			std::cout<<" MinBCaktualisiermal: "<<minbc_dir.x<< minbc_dir.y<< 
-			minbc_dir.z<<std::endl;
-			std::cout<<" MaxABaktualisiermal: "<<maxab_dir.x<< maxab_dir.y<< 
-			maxab_dir.z<<std::endl;
-			std::cout<<" MaxACaktualisiermal: "<<maxac_dir.x<< maxac_dir.y<< 
-			maxac_dir.z<<std::endl;
-			std::cout<<" MaxBCaktualisiermal: "<<maxbc_dir.x<< maxbc_dir.y<< 
-			maxbc_dir.z<<std::endl;
-*/
+		std::cout<<"Direction normalized:"<<tempvec.x<<tempvec.y<<tempvec.z<< "end"<<temp<<std::endl;
+			std::cout<<" MinABaktualisiermal: "<<minab_normal.x<<" "<< minab_normal.y<< " "<<
+			minab_normal.z<<std::endl;  
+			std::cout<<" MinACaktualisiermal: "<<minac_normal.x<<" "<< minac_normal.y<<" "<< 
+			minac_normal.z<<std::endl;
+			std::cout<<" MinBCaktualisiermal: "<<minbc_normal.x<<" "<< minbc_normal.y<<" "<< 
+			minbc_normal.z<<std::endl;
+			std::cout<<" MaxABaktualisiermal: "<<maxab_normal.x<<" "<< maxab_normal.y<<" "<< 
+			maxab_normal.z<<std::endl;
+			std::cout<<" MaxACaktualisiermal: "<<maxac_normal.x<<" "<< maxac_normal.y<< " "<<
+			maxac_normal.z<<std::endl;
+			std::cout<<" MaxBCaktualisiermal: "<<maxbc_normal.x<<" "<< maxbc_normal.y<< " "<<
+			maxbc_normal.z<<std::endl;
+
 
 		//Intersetion MINab
 		glm::intersectRayPlane(test.origin, tempvec,
@@ -142,6 +263,7 @@
 		return shortest_distance;
 
 	}
+	* */
 
 /*~~~~~~~BOX~~~~~~~~~~~~*/
 	

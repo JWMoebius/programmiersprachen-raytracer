@@ -13,7 +13,7 @@ class Box : public Shape {
 	glm::vec3 get_min() const;
 	glm::vec3	get_max() const;
 	/* virtual*/ std::ostream& print(std::ostream&  os)const override;
-	float intersect(Ray test) const;
+	bool intersect(Ray const& test, float& shortest_distance);
 	private:
 	glm::vec3 minimum_;
 	glm::vec3 maximum_;
