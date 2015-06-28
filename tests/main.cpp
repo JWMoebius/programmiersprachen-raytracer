@@ -62,12 +62,29 @@ TEST_CASE("intersectRaySphere_ANOTHER", "[intersect_ANOTHER]"){
 		REQUIRE(bad_j==false);
 }
 
-TEST_CASE("ConDestructor", "[Aufgabe8]"){
-		std::cout<<"TESTCASE ORDER"<<std::endl;
+TEST_CASE("Static-Dynamic", "[Aufgabe7]"){
+		std::cout<<"######Aufgabe7#####"<<std::endl;
 		Color red(255, 0, 0);
 		glm::vec3 position(0);
 		
-		Sphere* s1 = new Sphere("sphere01", red, 1.2, position);
+		std::shared_ptr<Sphere> s1 = std::make_shared<Sphere>("sphere0", red, 1.2, position);
+		std::shared_ptr<Sphere> s2 = std::make_shared<Sphere>("sphere1", red, 1.2, position);
+		
+		s1->print(std::cout);
+		s2->print(std::cout);
+		int i = 3;
+
+		REQUIRE(i==3);
+		std::cout<<"#########Aufgabe7 End #########"<<std::endl;
+}
+
+
+TEST_CASE("ConDestructor", "[Aufgabe8]"){
+		std::cout<<"######Aufgabe8#####"<<std::endl;
+		Color red(255, 0, 0);
+		glm::vec3 position(0);
+		
+		Sphere* s1 = new Sphere("sphere0", red, 1.2, position);
 		Shape* s2 = new Sphere("sphere1", red, 1.2, position);
 		s1->print(std::cout);
 		s2->print(std::cout);
@@ -79,10 +96,12 @@ TEST_CASE("ConDestructor", "[Aufgabe8]"){
 }
 
 TEST_CASE("intersectRayCube", "[intersect_Cube]"){
-		Ray test_ray({0,1,2},{3,1,0});
-		Box b_bx("Box_bx", Color(4,5,9), glm::vec3(1,0,1), glm::vec3(3,2,3));
-		float i=b_bx.intersect(test_ray);
-		REQUIRE(i==3.0f);
+		Ray test_ray({0,1,2},{1,0,0});
+		Box b_bx("Box_bx", Color(4,5,9), glm::vec3(2,0,0), glm::vec3(3,2,3));
+		float distance = 0;
+		bool i=b_bx.intersect(test_ray, distance);
+		REQUIRE(distance==2.0f);
+		REQUIRE(i==true);
 }
 
 int main(int argc, char *argv[])
