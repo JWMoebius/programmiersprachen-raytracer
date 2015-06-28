@@ -2,7 +2,8 @@
 #include "../framework/Shape.hpp"
 #include "../framework/catch.hpp"
 #include <string>
-
+#include "../framework/Box.cpp"
+#include "../framework/Sphere.cpp"
 
 TEST_CASE("AREA","[Aufgabe2area]")
 {
@@ -43,13 +44,44 @@ TEST_CASE("intersectRaySphere", "[intersect]")
 	auto result = glm::intersectRaySphere(
 			ray_origin, ray_direction,
 			sphere_center, sphere_radius, distance);
+			std::cout<< " DISTANCE:" << distance << std::endl;
 	REQUIRE(distance == Approx(4.0f));
 }
 
-TEST_CASE(){
+TEST_CASE("intersectRaySphere_ANOTHER", "[intersect_ANOTHER]"){
 		Ray test_ray({0,0,0},{0,8,0});
+		Ray badtest_ray({0,0,0},{1,0,0});
 		Sphere s_five("hase", Color(9,9,9), 1, glm::vec3(0,4,0));
-		float i=s_five.intersect(test_ray);
+		float j_distance = 0;
+		float badj_distance = 0;
+		
+		bool j=s_five.intersect(test_ray, j_distance);
+		bool bad_j=s_five.intersect(badtest_ray, badj_distance);
+		REQUIRE(j_distance==3.0f);
+		REQUIRE(j==true);
+		REQUIRE(bad_j==false);
+}
+
+TEST_CASE("ConDestructor", "[Aufgabe8]"){
+		std::cout<<"TESTCASE ORDER"<<std::endl;
+		Color red(255, 0, 0);
+		glm::vec3 position(0);
+		
+		Sphere* s1 = new Sphere("sphere01", red, 1.2, position);
+		Shape* s2 = new Sphere("sphere1", red, 1.2, position);
+		s1->print(std::cout);
+		s2->print(std::cout);
+		delete s1;
+		delete s2;
+		int i = 3;
+		std::cout<<"#########Aufgabe8 End #########"<<std::endl;
+		REQUIRE(i==3);
+}
+
+TEST_CASE("intersectRayCube", "[intersect_Cube]"){
+		Ray test_ray({0,1,2},{3,1,0});
+		Box b_bx("Box_bx", Color(4,5,9), glm::vec3(1,0,1), glm::vec3(3,2,3));
+		float i=b_bx.intersect(test_ray);
 		REQUIRE(i==3.0f);
 }
 
