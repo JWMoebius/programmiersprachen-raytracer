@@ -6,7 +6,7 @@
 
 
 	Box::Box()
-	:Shape{name_, color_}, minimum_{0,0,0}, maximum_{0,0,0}
+	:Shape{get_name(), get_color()}, minimum_{0,0,0}, maximum_{0,0,0}
 	{}
 	Box::Box(std::string name, Color color, glm::vec3 const& minimum, glm::vec3 const& maximum)
 	:Shape{name, color}, minimum_{minimum}, maximum_{maximum}
@@ -61,8 +61,8 @@
 			f.x= maximum_.x; //--> passt
 			f.y= maximum_.y; //--> passt
 		glm::vec3 g = minimum_;	// hinten links oben
-			e.y= maximum_.y; //--> passt
-			e.z= maximum_.z; //--> passt
+			g.y= maximum_.y; //--> passt
+			g.z= maximum_.z; //--> passt
 		glm::vec3 h = maximum_;	// hinten rechts oben
 		
 		//unten	Richtungsvektor
@@ -88,6 +88,7 @@
 		//links Richtungsvektor
 			//ac
 			//ae
+
 		glm::vec3 left = glm::cross(ac, ae);
 		glm::vec3 left_orig = minimum_;
 		//rechts Richtungsvektor	
@@ -95,22 +96,20 @@
 			//hf
 		glm::vec3 right = glm::cross(hd, hf);
 		glm::vec3 right_orig = maximum_;
-		
+
 		//Normalize:
-		bottom = glm::normalize(bottom);
+	/*	bottom = glm::normalize(bottom);
 		top = glm::normalize(top);
 		front = glm::normalize(front);
 		back = glm::normalize(back);
 		left = glm::normalize(left);
 		right = glm::normalize(right);
-		
+		*/
 		//Intersection BOTTOM
 		glm::intersectRayPlane(test.origin, tempvec,
 		bottom_orig, bottom, temp);	
-		std::cout<<temp<< std::endl;
 		shortest_distance = temp;
-		if (temp>-9223372036854775807&&temp<9223372036854775807){is_intersected = true;}
-		std::cout<<temp<<std::endl;			
+		if (temp>-9223372036854775807&&temp<9223372036854775807){is_intersected = true;}		
 		//Intersection TOP
 		glm::intersectRayPlane(test.origin, tempvec,
 		top_orig, top, temp);
@@ -118,7 +117,6 @@
 			shortest_distance = temp;	
 			is_intersected = true;	
 		}
-		std::cout<<temp<<std::endl;
 		//Intersection FRONT
 		glm::intersectRayPlane(test.origin, tempvec,
 		front_orig, front, temp);
@@ -126,15 +124,14 @@
 			shortest_distance = temp;	
 			is_intersected = true;
 		}
-		std::cout<<temp<<std::endl;
 		//Intersection BACK
 		glm::intersectRayPlane(test.origin, tempvec,
 		back_orig, back, temp);	
 		if (temp<shortest_distance&&temp>-9223372036854775807&&temp<9223372036854775807){
 			shortest_distance = temp;	
-			is_intersected = true;
+			is_intersected = true;			
 		}	
-		std::cout<<temp<<std::endl;
+
 		//Intersection LEFT
 		glm::intersectRayPlane(test.origin, tempvec,
 		left_orig, left, temp);		
@@ -142,7 +139,7 @@
 			shortest_distance = temp;	
 			is_intersected = true;
 		}			
-		std::cout<<temp<<std::endl;
+
 		//Intersection RIGHT
 		glm::intersectRayPlane(test.origin, tempvec,
 		right_orig, right, temp);		
@@ -150,10 +147,16 @@
 			shortest_distance = temp;
 			is_intersected = true;	
 		}	
-		std::cout<<temp<<std::endl;
-		shortest_distance = temp;
+
 		return is_intersected;
 
 	}
+
+
+
+
+		
+
+
 /*~~~~~~~BOX~~~~~~~~~~~~*/
 	

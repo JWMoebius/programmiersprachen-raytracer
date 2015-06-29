@@ -96,12 +96,16 @@ TEST_CASE("ConDestructor", "[Aufgabe8]"){
 }
 
 TEST_CASE("intersectRayCube", "[intersect_Cube]"){
-		Ray test_ray({0,1,2},{1,0,0});
-		Box b_bx("Box_bx", Color(4,5,9), glm::vec3(2,0,0), glm::vec3(3,2,3));
+		Ray test_ray({-7,1,2},{1,0,0});
+		Box b_bx("Box_bx", Color(4,5,9), glm::vec3(2,0,0), glm::vec3(4,2,3));
 		float distance = 0;
 		bool i=b_bx.intersect(test_ray, distance);
-		REQUIRE(distance==2.0f);
+		REQUIRE(distance==9.0f);
 		REQUIRE(i==true);
+		Ray test_ray2({3,-7,2},{0,1,0});
+		bool j=b_bx.intersect(test_ray2, distance);
+		REQUIRE(distance==7.0f);
+		REQUIRE(j==true);
 }
 
 int main(int argc, char *argv[])
